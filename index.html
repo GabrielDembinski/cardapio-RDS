@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RDS — Cardápio Digital</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Seletor de Temas Integrado -->
+    <div
+        style="max-width: 1200px; margin: 10px auto 0 auto; padding: 0 20px; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+        <label for="theme-select"
+            style="font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted);">🎨 Tema:</label>
+        <select id="theme-select" onchange="mudarTema(this.value)"
+            style="padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); cursor: pointer; font-size: 13px;">
+            <option value="claro">Claro</option>
+            <option value="escuro">Escuro 🌙</option>
+            <option value="cafe">Café ☕</option>
+        </select>
+    </div>
+
+    <!-- Cabeçalho -->
+    <header class="header">
+        <div class="header-container">
+            <h1 class="logo">LANCHES RDS</h1>
+            <button id="cart-btn" class="cart-btn" onclick="toggleCart()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Navegação de Categorias -->
+    <nav class="categories-nav" id="categories-nav">
+        <!-- Preenchido via JS -->
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content" id="products-container">
+        <!-- Preenchido via JS -->
+    </main>
+
+    <!-- Seção: Cantinho de Feedbacks -->
+    <section class="main-content" style="margin-top: 40px; margin-bottom: 40px;">
+        <div class="category-section">
+            <h2 class="category-title">💬 Cantinho de Feedbacks</h2>
+
+            <!-- Formulário para Enviar Feedback -->
+            <div class="product-card" style="flex-direction: column; margin-bottom: 24px;">
+                <h3 style="font-size: 16px; margin-bottom: 12px;">Deixe sua avaliação</h3>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>Seu Nome *</label>
+                    <input type="text" id="fb-nome" placeholder="Como podemos te chamar?">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>Sua Nota *</label>
+                    <div id="star-rating" style="display: flex; gap: 8px; font-size: 28px; cursor: pointer;">
+                        <span onclick="setRating(1)" class="star">★</span>
+                        <span onclick="setRating(2)" class="star">★</span>
+                        <span onclick="setRating(3)" class="star">★</span>
+                        <span onclick="setRating(4)" class="star">★</span>
+                        <span onclick="setRating(5)" class="star">★</span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Seu Comentário *</label>
+                    <textarea id="fb-comentario" placeholder="O que achou do lanche, entrega e atendimento?"
+                        style="width: 100%; padding: 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); resize: vertical; min-height: 80px; font-family: inherit;"></textarea>
+                </div>
+
+                <button class="btn-primary" onclick="enviarFeedback()">Enviar Feedback</button>
+            </div>
+
+            <!-- Lista Onde os Feedbacks Vão Aparecer -->
+            <div id="feedbacks-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Carregado dinamicamente via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <p><strong>RDS — Cardápio Digital</strong></p>
+        <p class="disclaimer">Imagens meramente ilustrativas.</p>
+    </footer>
+
+    <!-- Modal do Carrinho -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="modal-content side-modal">
+            <div class="modal-header">
+                <h2>Seu Carrinho</h2>
+                <button class="close-btn" onclick="toggleCart()">&times;</button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Preenchido via JS -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-totals">
+                    <span>Total:</span>
+                    <span id="cart-total-value">R$ 0,00</span>
+                </div>
+                <button class="btn-primary" id="btn-checkout" onclick="openCheckout()">Finalizar Pedido</button>
+                <button class="btn-text" onclick="clearCart()">Limpar carrinho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Finalização -->
+    <div id="checkout-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Finalizar Pedido</h2>
+                <button class="close-btn" onclick="closeCheckout()">&times;</button>
+            </div>
+            <div class="checkout-form">
+                <div class="form-group">
+                    <label>Nome completo *</label>
+                    <input type="text" id="cli-nome" placeholder="Seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefone (WhatsApp) *</label>
+                    <input type="tel" id="cli-telefone" placeholder="(93) 90000-0000" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Como deseja receber? *</label>
+                    <div class="delivery-options">
+                        <label class="radio-label">
+                            <input type="radio" name="tipo-pedido" value="Retirada" onchange="toggleAddress()" checked>
+                            Retirar no local
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tipo-pedido" value="Entrega" onchange="toggleAddress()">
+                            Entrega (+ R$ <span id="lbl-taxa"></span>)
+                        </label>
+                    </div>
+                </div>
+
+                <div id="address-fields" class="address-fields hidden">
+                    <button class="btn-location" onclick="getLocation()">
+                        📍 Usar minha localização atual
+                    </button>
+                    <p id="location-status" class="location-status"></p>
+
+                    <div class="form-group">
+                        <label>Rua / Avenida *</label>
+                        <input type="text" id="end-rua" placeholder="Ex: Rua Principal">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Número *</label>
+                            <input type="text" id="end-numero" placeholder="Ex: 123">
+                        </div>
+                        <div class="form-group">
+                            <label>Bairro *</label>
+                            <input type="text" id="end-bairro" placeholder="Ex: Centro">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Complemento</label>
+                        <input type="text" id="end-complemento" placeholder="Apto, Bloco, etc (Opcional)">
+                    </div>
+                    <div class="form-group">
+                        <label>Ponto de Referência</label>
+                        <input type="text" id="end-referencia" placeholder="Ex: Próximo à praça">
+                    </div>
+                </div>
+
+                <div class="checkout-summary">
+                    <p>Subtotal: <span id="resumo-subtotal">R$ 0,00</span></p>
+                    <p id="resumo-taxa-row" class="hidden">Taxa de entrega: <span id="resumo-taxa">R$ 0,00</span></p>
+                    <h3>Total a Pagar: <span id="resumo-total">R$ 0,00</span></h3>
+                </div>
+
+                <button class="btn-primary btn-block" onclick="finishOrder()">Confirmar e Enviar para WhatsApp</button>
+                <button class="btn-secondary btn-block" onclick="closeCheckout()">Voltar ao Carrinho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container de Notificações (Toasts) -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
